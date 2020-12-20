@@ -1,10 +1,10 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import logo from "../images/logo.svg";
+import logo from "../images/ebloue-logo.png";
 
 const PublicNavBar = () => {
   return (
-    <div>
+    <div className="Nav-bar">
       <Navbar expand="lg">
         <Navbar.Brand>
           <img

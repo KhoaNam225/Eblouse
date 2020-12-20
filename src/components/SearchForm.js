@@ -2,7 +2,7 @@ import React from "react";
 
 const SearchForm = () => {
   return (
-    <div className="form-control">
+    <div className="form">
       <div className="condition">
         <div class="search-input">
           <i class="locate-icon fas fa-map-marker-alt"></i>

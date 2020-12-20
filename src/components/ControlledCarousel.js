@@ -1,51 +1,66 @@
-import { Carousel } from "react-bootstrap";
 import React, { useState } from "react";
 
-const ControlledCarousel = () => {
-  const [index, setIndex] = useState(0);
-
-  const handleSelect = (selectedIndex, e) => {
-    setIndex(selectedIndex);
+const ControlledCarousel = ({ sliderWidth, sliderHeight }) => {
+  const [activeIndex, setActiveIndex] = useState(1);
+  const [left, setLeft] = useState(0);
+  const [slider, setSlider] = useState(["one", "two", "three", "four"]);
+  const prevSlide = () => {
+    setActiveIndex(activeIndex - 1);
+    setLeft(left + sliderWidth);
+    if (activeIndex === 1) {
+      setActiveIndex(activeIndex + (slider.length - 1));
+      setLeft(left - sliderWidth * (slider.length - 1));
+    }
+  };
+  const nextSlide = () => {
+    setActiveIndex(activeIndex + 1);
+    setLeft(left - sliderWidth);
+    if (activeIndex === slider.length) {
+      setActiveIndex(activeIndex - slider.length + 1);
+      setLeft(0);
+    }
+  };
+  const clickIndicator = (e) => {
+    setActiveIndex(parseInt(e.target.textContext));
+    setLeft(sliderWidth - parseInt(e.target.textContext) * sliderWidth);
   };
 
   return (
     <div>
-      <Carousel activeIndex={index} onSelect={handleSelect}>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="holder.js/800x400?text=First slide&bg=373940"
-            alt="First slide"
-          />
-          <Carousel.Caption>
-            <h3>First slide label</h3>
-            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img
-            className="d-block w-100"
-            src="holder.js/800x400?text=Second slide&bg=282c34"
-            alt="Second slide"
-          />
-
-          <Carousel.Caption>
-            <h3>Second slide label</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item>
-          <img className="d-block w-100" src="" alt="Third slide" />
-
-          <Carousel.Caption>
-            <h3>Third slide label</h3>
-            <p>
-              Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-            </p>
-          </Carousel.Caption>
-        </Carousel.Item>
-      </Carousel>
+      <div className="slider-wrapper">
+        <ul className="slider">
+          {slider.map((item, index) => {
+            return (
+              <li
+                style={{ left: left, width: sliderWidth, height: sliderHeight }}
+                className={index + 1 === activeIndex ? "slider-item" : "hide"}
+              >
+                {item}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="buttons-wrapper">
+        <button className="prev-button" onClick={prevSlide}></button>
+        <button className="next-button" onClick={nextSlide}></button>
+      </div>
+      <div className="indicators-wrapper">
+        <ul className="indicators">
+          {slider.map((item, index) => {
+            return (
+              <li
+                className={index + 1 === activeIndex ? "active-indicator" : ""}
+                onClick={clickIndicator}
+              >
+                {index + 1}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
+
 export default ControlledCarousel;

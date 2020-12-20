@@ -1,15 +1,17 @@
 import React from "react";
-import PublicNavBar from "../components/PublicNavBar";
+import SearchForm from "../components/SearchForm";
+import ControlledCarousel from "../components/ControlledCarousel";
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="wrapper">
       <section className="Search-section">
-        {/* <div>
-          <PublicNavBar />
-        </div> */}
         <div className="status">
           <h1 class="feel">Feeling mehh? Find a doctor.</h1>
+        </div>
+        <div className="Search-control">
+          <SearchForm />
+          <ControlledCarousel />
         </div>
       </section>
     </div>
