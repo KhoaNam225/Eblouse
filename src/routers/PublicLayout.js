@@ -10,14 +10,14 @@ import DetailPage from "../pages/DetailPage";
 import BookingDetailPage from "../pages/BookingDetailPage";
 import BookingConfirm from "../pages/BookingConfirm";
 import PrivateRoute from "./PrivateRoute";
-import "../App.css";
 import SearchListPage from "../pages/SearchListPage";
+
+import "../style/main.css";
+
 const PublicLayout = () => {
   return (
-    <>
-      <div className="Nav-Bar">
-        <PublicNavBar />
-      </div>
+    <div className="wrapper">
+      <PublicNavBar />
 
       <Switch>
         <Container>
@@ -42,7 +42,7 @@ const PublicLayout = () => {
           </Switch>
         </Container>
       </Switch>
-    </>
+    </div>
   );
 };
 

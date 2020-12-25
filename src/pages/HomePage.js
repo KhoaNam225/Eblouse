@@ -7,11 +7,10 @@ const HomePage = () => {
     <div className="wrapper">
       <section className="Search-section">
         <div className="status">
-          <h1 class="feel">Feeling mehh? Find a doctor.</h1>
+          <h1 className="feel">Feeling mehh? Find a doctor.</h1>
         </div>
         <div className="Search-control">
-          <SearchForm />
-          <ControlledCarousel />
+          <ControlledCarousel sliderHeight={400} sliderWidth={400} />
         </div>
       </section>
     </div>
