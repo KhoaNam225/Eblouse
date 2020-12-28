@@ -139,15 +139,15 @@
 }
 
 .right-shadow-box {
-  box-shadow: 5px 0px 10px #cccccc;
+  box-shadow: 5px 0px 10px #ccccccb7;
 }
 
 .both-side-shadow-box {
-  box-shadow: 0px 0px 10px #cccccc;
+  box-shadow: 0px 0px 10px #ccccccc7;
 }
 
 .left-shadow-box {
-  box-shadow: -5px 0px 10px #cccccc;
+  box-shadow: -5px 0px 10px #ccccccb6;
 }
 
 .nav-btn:hover::after {

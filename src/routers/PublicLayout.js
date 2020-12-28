@@ -16,33 +16,24 @@ import "../style/main.css";
 
 const PublicLayout = () => {
   return (
-    <div className="wrapper">
+    <>
       <PublicNavBar />
-
       <Switch>
-        <Container>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/login" component={LoginPage} />
-            <Route exac path="/info" component={InformationPage} />
-            <Route exac path="/detail/:id" component={DetailPage} />
-            <Route exac path="/search" component={SearchListPage} />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/login" component={LoginPage} />
+        <Route exac path="/info" component={InformationPage} />
+        <Route exac path="/detail/:id" component={DetailPage} />
+        <Route exac path="/search" component={SearchListPage} />
 
-            <PrivateRoute
-              exac
-              path="/booking/:id"
-              component={BookingDetailPage}
-            />
-            <PrivateRoute
-              exac
-              path="/booking/confirm/:id"
-              component={BookingConfirm}
-            />
-            <Route exac component={NotFoundPage} />
-          </Switch>
-        </Container>
+        <PrivateRoute exac path="/booking/:id" component={BookingDetailPage} />
+        <PrivateRoute
+          exac
+          path="/booking/confirm/:id"
+          component={BookingConfirm}
+        />
+        <Route exac component={NotFoundPage} />
       </Switch>
-    </div>
+    </>
   );
 };
 

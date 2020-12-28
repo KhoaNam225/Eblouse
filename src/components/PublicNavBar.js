@@ -114,7 +114,7 @@ const BookingSearchBar = ({
             />
           </div>
           <button type="submit" className="submit-btn">
-            <i class="fas fa-search"></i>
+            <i className="fas fa-search"></i>
           </button>
         </div>
       </form>
@@ -147,7 +147,7 @@ const ReviewsSearchBar = ({ clinicName, setClinicName, onSubmit }) => {
             />
           </div>
           <button type="submit" className="submit-btn">
-            <i class="fas fa-search"></i>
+            <i className="fas fa-search"></i>
           </button>
         </div>
       </form>
