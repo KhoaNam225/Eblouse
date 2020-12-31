@@ -33,8 +33,8 @@ export const MultiItemsCarousel = ({ items }) => {
           {
             resolve: arrowsPlugin,
             options: {
-              arrowLeft: <NavigationArrows direction="left" />,
-              arrowRight: <NavigationArrows direction="right" />,
+              arrowLeft: <NavigationArrows direction={"left"} />,
+              arrowRight: <NavigationArrows direction={"right"} />,
               addArrowClickHandler: true,
             },
           },

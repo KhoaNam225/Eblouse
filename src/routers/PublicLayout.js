@@ -1,12 +1,11 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 import { Switch, Route } from "react-router-dom";
 import PublicNavBar from "../components/PublicNavBar";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import InformationPage from "../pages/InformationPage";
 import NotFoundPage from "../pages/NotFoundPage";
-import DetailPage from "../pages/DetailPage";
+import ClinicDetailPage from "../pages/ClinicDetailPage";
 import BookingDetailPage from "../pages/BookingDetailPage";
 import BookingConfirm from "../pages/BookingConfirm";
 import PrivateRoute from "./PrivateRoute";
@@ -22,7 +21,7 @@ const PublicLayout = () => {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/login" component={LoginPage} />
         <Route exac path="/info" component={InformationPage} />
-        <Route exac path="/detail/:id" component={DetailPage} />
+        <Route exac path="/clinic/:id" component={ClinicDetailPage} />
         <Route exac path="/search" component={SearchListPage} />
 
         <PrivateRoute exac path="/booking/:id" component={BookingDetailPage} />

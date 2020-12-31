@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { Spinner } from "react-bootstrap";
 import { MultiItemsCarousel } from "../components/Carousel";
 import reviewsActions from "../redux/actions/reviews.actions";
 import "../style/HomePage.css";
-import { findByLabelText } from "@testing-library/react";
 
 const HomePage = () => {
   const reviews = useSelector((states) => states.reviews.reviews);
   const isLoading = useSelector((states) => states.reviews.isLoading);
-
+  const history = useHistory();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,6 +26,9 @@ const HomePage = () => {
         comment={review.comment}
         rating={review.rating}
         key={review.clinicName}
+        onClick={() => {
+          history.push("/clinic/25111997");
+        }}
       />
     ));
 
@@ -55,6 +58,7 @@ const ReviewCard = ({
   description,
   comment,
   rating,
+  onClick,
 }) => {
   const infoStyle = {
     display: "flex",
@@ -62,7 +66,7 @@ const ReviewCard = ({
     alignItems: "center",
   };
   return (
-    <div class="home-page-review-card">
+    <div class="home-page-review-card" onClick={onClick}>
       <div style={infoStyle}>
         <div>
           <img

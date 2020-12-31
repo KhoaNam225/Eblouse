@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Nav } from "react-bootstrap";
 import logo from "../images/ebloue-logo.png";
 import "../style/PublicNavBar.css";
@@ -11,38 +11,108 @@ const PublicNavBar = () => {
   const [date, setDate] = useState(null);
   const [peopleNum, setPeopleNum] = useState(0);
   const [searchMode, setSearchMode] = useState(BOOKING_SEARCH_MODE);
+  const [showFullClicked, setshowFullClicked] = useState(false);
+  const [scrollOffsetY, setScrollOffsetY] = useState(0);
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollOffsetY(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const FullNavBar = () => {
+    return (
+      <>
+        <div className="nav-bar">
+          <div id="logo">
+            <img src={logo} alt="Eblouse" width="100px" />
+          </div>
+          <div className="nav-middle">
+            <button
+              className="nav-btn"
+              onClick={() => setSearchMode(BOOKING_SEARCH_MODE)}
+            >
+              Book an appointment
+            </button>
+            <button
+              className="nav-btn"
+              onClick={() => {
+                setSearchMode(REVIEWS_SEARCH_MODE);
+              }}
+            >
+              See reviews
+            </button>
+            {scrollOffsetY > 0 ? (
+              <button
+                className="nav-btn"
+                onClick={() => {
+                  setshowFullClicked(false);
+                }}
+              >
+                Show Less
+              </button>
+            ) : null}
+          </div>
+          <div className="nav-links">
+            <Nav.Link href="/">Home Page</Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link>
+          </div>
+        </div>
+        {searchMode === BOOKING_SEARCH_MODE ? (
+          <BookingSearchBar />
+        ) : (
+          <ReviewsSearchBar />
+        )}
+      </>
+    );
+  };
+
+  const PartialNavBar = () => {
+    return (
+      <>
+        <div className="nav-bar">
+          <div id="logo">
+            <img src={logo} alt="Eblouse" width="100px" />
+          </div>
+          <div className="nav-middle">
+            <div
+              onClick={() => {
+                setshowFullClicked(true);
+              }}
+              className="show-full-nav-btn"
+            >
+              <p>Start your search</p>
+              <div className="search-btn-show-full">
+                <i className="fas fa-search"></i>
+              </div>
+            </div>
+          </div>
+          <div className="nav-links">
+            <Nav.Link href="/">Home Page</Nav.Link>
+            <Nav.Link href="/login">Login</Nav.Link>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   return (
-    <div className="nav-wrapper-full">
-      <div className="nav-bar">
-        <div id="logo">
-          <img src={logo} alt="Eblouse" width="100px" />
-        </div>
-        <div className="nav-middle">
-          <button
-            className="nav-btn"
-            onClick={() => setSearchMode(BOOKING_SEARCH_MODE)}
-          >
-            Book an appointment
-          </button>
-          <button
-            className="nav-btn"
-            onClick={() => {
-              setSearchMode(REVIEWS_SEARCH_MODE);
-            }}
-          >
-            See reviews
-          </button>
-        </div>
-        <div className="nav-links">
-          <Nav.Link href="/">Home Page</Nav.Link>
-          <Nav.Link href="/login">Login</Nav.Link>
-        </div>
-      </div>
-      {searchMode === BOOKING_SEARCH_MODE ? (
-        <BookingSearchBar />
+    <div
+      className={
+        scrollOffsetY > 0 ? "nav-wrapper-full nav-scrolled" : "nav-wrapper-full"
+      }
+    >
+      {scrollOffsetY > 0 && !showFullClicked ? (
+        <PartialNavBar />
       ) : (
-        <ReviewsSearchBar />
+        <FullNavBar />
       )}
     </div>
   );
