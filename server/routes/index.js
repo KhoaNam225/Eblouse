@@ -5,11 +5,21 @@ const router = express.Router();
 // const userApi = require("./user.api");
 // router.use("/users", userApi);
 
-// clinicApi
+// // doctorApi
+// const doctorApi = require("./doctor.api");
+// router.use("/doctors", doctorApi);
+
+// // bookingApi
+// const bookingApi = require("./booking.api");
+// router.use("/bookings", bookingApi);
+
+// auth api
+
+// clinicApi;
 const clinicApi = require("./clinic.api");
 router.use("/clinic", clinicApi);
 
-// reviewApi
+// reviewApi;
 const reviewApi = require("./review.api");
 router.use("/review", reviewApi);
 

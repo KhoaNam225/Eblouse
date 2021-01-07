@@ -13,10 +13,39 @@ const validators = require("../middlewares/validator");
 router.post(
   "/clinic/:id",
   // authMiddleware.loginRequired,
+  // validators.validate([
+  //   param("id").exists().isString().custom(validators.checkObjectId),
+  //   body("content", "Missing content").exists().notEmpty(),
+  // ]),
+  reviewController.createNewReview
+);
+
+/**
+ * @route PUT api/reviews/:id
+ * @description Update a review
+ * @access Login required
+ */
+router.put(
+  "/:id",
+  // authMiddleware.loginRequired,
   validators.validate([
     param("id").exists().isString().custom(validators.checkObjectId),
     body("content", "Missing content").exists().notEmpty(),
   ]),
-  reviewController.createNewReview
+  reviewController.updateSingleReview
 );
+/**
+ * @route DELETE api/reviews/:id
+ * @description Delete a review
+ * @access Login required
+ */
+router.delete(
+  "/:id",
+  // authMiddleware.loginRequired,
+  validators.validate([
+    param("id").exists().isString().custom(validators.checkObjectId),
+  ]),
+  reviewController.deleteSingleReview
+);
+
 module.exports = router;

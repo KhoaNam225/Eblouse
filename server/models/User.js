@@ -1,28 +1,28 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const jwt = require("jsonwebtoken");
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const userSchema = Schema(
   {
-    name: { type: String, required: true },
-    detail: {
-      fullname: { type: String },
-      gender: ["F", "M", "Other"],
-      bloodType: [
-        "A Rh+",
-        "A Rh-",
-        "B Rh+",
-        "B Rh-",
-        "AB Rh+",
-        "AB Rh-",
-        "O Rh+",
-        "O Rh-",
-      ],
-
-      idCard: { type: Number },
-      career: { type: String },
-    },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    avatarUrl: { type: String, required: false },
+    isDeleted: { type: Boolean, default: false, select: false },
   },
-  { timestamps: true }
+  { timestamp: true }
 );
+
+userSchema.plugin(require("./plugins/isDeletedFalse"));
+
+userSchema.methods.generateToken = async function () {
+  const accessToken = await jwt.sign({ _id: this._id }, JWT_SECRET_KEY, {
+    expiresIn: "1d",
+  });
+  return accessToken;
+};
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;

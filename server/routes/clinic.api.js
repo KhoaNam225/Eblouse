@@ -7,7 +7,7 @@ const validators = require("../middlewares/validator");
 
 /**
  * @route GET api/clinic?q=:category
- * @description Get clinics with limit, page and query
+ * @description Get clinics with query
  * @access Public
  */
 

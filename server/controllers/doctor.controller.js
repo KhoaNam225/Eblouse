@@ -7,5 +7,6 @@
 // const Doctor = require("../models/Doctor");
 // const doctorController = {};
 
-// doctorController.
-// module.exports = doctorController;
+// doctorController
+
+// doctorController.module.exports = doctorController;

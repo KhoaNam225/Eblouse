@@ -29,7 +29,7 @@ mongoose
   })
   .then(() => {
     console.log(`Mongoose connected to ${MONGODB_URI}`);
-    // require("./models/testSchema");
+    require("./testing/testSchema");
   })
   .catch((err) => console.log(err));
 
