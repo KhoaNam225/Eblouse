@@ -39,27 +39,6 @@ router.post(
   ]),
   bookController.createNewBooking
 );
-
-/**
- * @route GET api/booking/:id
- * @description Get single booking
- * @access Login required
- */
-
-router.get(
-  "/:id",
-  validators.validate([param("id").exists().custom(validators.checkObjectId)]),
-  bookController.getSingleBooking
-);
-
-/**
- * @route GET api/booking?page=1&limit=10&q=:category
- * @description Get bookings with limit, page
- * @access Login required
- */
-
-router.get("/", bookController.getListOfBooking);
-
 /**
  * @route PUT api/booking/:id
  * @description Update a booking, user can cancel this booking

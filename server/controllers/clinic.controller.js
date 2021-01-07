@@ -5,7 +5,7 @@ const {
 } = require("../helpers/utils.helper");
 const Clinic = require("../models/Clinic");
 const Review = require("../models/Review");
-// const Doctor = require("../models/Doctor");
+const Doctor = require("../models/Doctor");
 const Booking = require("../models/Booking");
 const userController = require("./user.controller");
 const User = require("../models/User");
@@ -24,16 +24,18 @@ clinicController.getSearchCategory = catchAsync(async (req, res, next) => {
 //  user can get detail of clinic
 clinicController.getSingleClinic = catchAsync(async (req, res, next) => {
   let clinic = await Clinic.findById(req.params.id);
+  clinic = clinic.toJSON();
   if (!clinic)
     return next(
       new AppError(404, "clinic not found", " Get single clinic Error")
     );
-  clinic.reviews = await Review.find({ doctor: doctor._id }).populate("clinic");
+  clinic.reviews = await Review.find({ clinic: clinic._id });
+  // console.log("hihihihih", clinic);
   return sendResponse(
     res,
     200,
     true,
-    { clinic },
+    clinic,
     null,
     "get single clinic success"
   );
