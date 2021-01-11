@@ -118,8 +118,7 @@ const createRandomUsers = async (userNum) => {
       const salt = await bcrypt.genSalt(10);
       const password = await bcrypt.hash("123", salt);
       let user = await User.create({
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
+        name: faker.name.findName(),
         email: faker.internet.email().toLowerCase(),
         password: password,
         avatarUrl: faker.image.avatar(),
@@ -251,7 +250,7 @@ const createRandomClinic = async (
   }
 };
 
-const createRandomReview = async (clinics, users) => {
+const createRandomReview = async (users, clinics) => {
   try {
     console.log("CREATING 5 REVIEWS FOR EACH CLINIC");
     console.log("------------------------------");
@@ -283,6 +282,7 @@ const createRandomReview = async (clinics, users) => {
 };
 
 const createRandomBooking = async (users, clinics) => {
+  console.log("hahdud", users);
   try {
     console.log("CREATING 5 BOOKINGS FOR EACH CLINIC");
     console.log("------------------------------");
@@ -340,7 +340,6 @@ const createRandomBooking = async (users, clinics) => {
 };
 
 const main = async (genData = false) => {
-  // if (genData === false) return;
   if (genData) {
     await cleanData();
     const specializations = await createSpecialization();
@@ -358,7 +357,7 @@ const main = async (genData = false) => {
       specializations,
       2
     );
-    const reviews = await createRandomReview(clinics, users);
+    const reviews = await createRandomReview(users, clinics);
     const bookings = await createRandomBooking(users, clinics);
   }
 
@@ -389,4 +388,4 @@ const main = async (genData = false) => {
   console.log(JSON.stringify(booking, null, 2));
 };
 
-main(true);
+// main(true);

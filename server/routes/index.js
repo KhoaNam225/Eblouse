@@ -9,9 +9,9 @@ router.use("/users", userApi);
 // const doctorApi = require("./doctor.api");
 // router.use("/doctors", doctorApi);
 
-// // bookingApi
-// const bookingApi = require("./booking.api");
-// router.use("/bookings", bookingApi);
+// bookingApi
+const bookingApi = require("./booking.api");
+router.use("/bookings", bookingApi);
 
 // auth api
 const authApi = require("./auth.api");

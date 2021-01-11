@@ -1,5 +1,4 @@
 import React from "react";
-import ControlledCarousel from "../components/ControlledCarousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const SearchListPage = () => {
@@ -17,7 +16,7 @@ const SearchListPage = () => {
       <section className="list-of-clinics">
         <div className="first-item d-flex">
           <div className="col-5 left-side">
-            <ControlledCarousel sliderWidth={400} sliderHeight={250} />
+            {/* <ControlledCarousel sliderWidth={400} sliderHeight={250} /> */}
           </div>
           <div className="col-7 right-side">
             <h4>Clinic with many major</h4>
