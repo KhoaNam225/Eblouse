@@ -1,34 +1,46 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import logo from "../images/ebloue-logo.png";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import authActions from "../redux/actions/auth.actions";
 
-const PublicNavBar = () => {
+const PublicNavbar = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const loading = useSelector((state) => state.auth.loading);
+  const currentUser = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(authActions.logout());
+  };
+  const authLinks = (
+    <Nav className="align-items-center">
+      <Nav.Link>
+        <img src={currentUser?.avatarUrl} className="avatar-xs" alt="avatar" />{" "}
+        {currentUser?.name}
+      </Nav.Link>
+      <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+    </Nav>
+  );
+  const publicLinks = (
+    <Nav>
+      <Nav.Link as={Link} to="/login">
+        Login
+      </Nav.Link>
+    </Nav>
+  );
+
   return (
-    <div className="Nav-bar">
-      <Navbar expand="lg">
-        <Navbar.Brand>
-          <img
-            src={logo}
-            alt="Eblouse"
-            width="100px"
-            // onClick={() => history.push("/")}
-          />
-        </Navbar.Brand>
+    <Navbar bg="light" expand="lg">
+      <Navbar.Brand as={Link} to="/" className="mr-auto">
+        {/* <img src={logo} alt="CoderSchool" width="200px" /> */}
+      </Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto"></Nav>
-        <Nav>
-          {/* <span style={{ padding: "8px" }}>{name}</span> */}
-          <Nav.Link href="/">Home Page</Nav.Link>
-          <Nav.Link href="/login">Login</Nav.Link>
-
-          {/* <Nav.Link href="/register">Sign up</Nav.Link> */}
-
-          {/* <Nav.Link href="/login">
-            Log out
-          </Nav.Link> */}
-        </Nav>
-      </Navbar>
-    </div>
+        {!loading && <>{isAuthenticated ? authLinks : publicLinks}</>}
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
-export default PublicNavBar;
+export default PublicNavbar;

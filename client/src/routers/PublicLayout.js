@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { Switch, Route } from "react-router-dom";
-import PublicNavBar from "../components/PublicNavBar";
+import PublicNavbar from "../components/PublicNavbar";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import InformationPage from "../pages/InformationPage";
@@ -16,7 +16,7 @@ const PublicLayout = () => {
   return (
     <>
       <div className="Nav-Bar">
-        <PublicNavBar />
+        <PublicNavbar />
       </div>
 
       <Switch>
@@ -24,21 +24,21 @@ const PublicLayout = () => {
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route exact path="/login" component={LoginPage} />
-            <Route exac path="/info" component={InformationPage} />
-            <Route exac path="/detail/:id" component={DetailPage} />
-            <Route exac path="/search" component={SearchListPage} />
+            <Route exact path="/info" component={InformationPage} />
+            <Route exact path="/detail/:id" component={DetailPage} />
+            <Route exact path="/search" component={SearchListPage} />
 
             <PrivateRoute
-              exac
+              exact
               path="/booking/:id"
               component={BookingDetailPage}
             />
             <PrivateRoute
-              exac
+              exact
               path="/booking/confirm/:id"
               component={BookingConfirm}
             />
-            <Route exac component={NotFoundPage} />
+            <Route exact component={NotFoundPage} />
           </Switch>
         </Container>
       </Switch>
