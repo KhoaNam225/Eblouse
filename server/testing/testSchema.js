@@ -340,7 +340,7 @@ const createRandomBooking = async (users, clinics) => {
 };
 
 const main = async (genData = false) => {
-  if (genData === false) return;
+  // if (genData === false) return;
   if (genData) {
     await cleanData();
     const specializations = await createSpecialization();
@@ -389,4 +389,4 @@ const main = async (genData = false) => {
   console.log(JSON.stringify(booking, null, 2));
 };
 
-// main(true);
+main(true);

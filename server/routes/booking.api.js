@@ -2,7 +2,7 @@ const express = require("express");
 const { route } = reuqire("./auth.api");
 const { body, param } = require("express-validator");
 const router = express.Router();
-const bookController = require("../controllers/booking.controller");
+const clinicController = require("../controllers/clinic.controller");
 const validators = require("../middlewares/validator");
 
 /**
@@ -14,7 +14,7 @@ const validators = require("../middlewares/validator");
 router.get(
   "/:id",
   validators.validate([param("id").exists().custom(validators.checkObjectId)]),
-  bookController.getSingleBooking
+  clinicController.getSingleBooking
 );
 
 /**
@@ -23,7 +23,7 @@ router.get(
  * @access Login required
  */
 
-router.get("/", bookController.getListOfBooking);
+router.get("/", clinicController.getListOfBooking);
 
 /**
  * @route POST api/booking/:id
@@ -37,7 +37,7 @@ router.post(
     param("id").exists().isString().custom(validators.checkObjectId),
     body("content", "Missing content").exists().notEmpty(),
   ]),
-  bookController.createNewBooking
+  clinicController.createNewBooking
 );
 /**
  * @route PUT api/booking/:id
@@ -51,7 +51,7 @@ router.put(
     param("id").exists().isString().custom(validators.checkObjectId),
     body("content", "Missing content").exists().notEmpty(),
   ]),
-  bookController.cancelBooking
+  clinicController.cancelBooking
 );
 
 module.exports = router;
