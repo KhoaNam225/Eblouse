@@ -64,7 +64,6 @@ router.put(
   // authMiddleware.loginRequired,
   validators.validate([
     param("id").exists().isString().custom(validators.checkObjectId),
-    body("content", "Missing content").exists().notEmpty(),
   ]),
   clinicController.acceptBookingRequest
 );

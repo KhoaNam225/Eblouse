@@ -190,7 +190,8 @@ const createRandomClinic = async (
     console.log("------------------------------");
     const languages = ["Vietnamese", "English", "Chinese", "Korean"];
     const clinics = [];
-
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash("123", salt);
     for (let index = 0; index < clinicsNum; index++) {
       let images = [];
       for (let i = 0; i < 5; i++) {
@@ -224,6 +225,8 @@ const createRandomClinic = async (
 
       let clinic = await Clinic.create({
         name: faker.company.companyName(),
+        email: faker.internet.email().toLowerCase(),
+        password: password,
         address: `${faker.address.streetAddress()} ${faker.address.streetName()}, ${faker.address.city()}`,
         startWorkingTime: getRandomInt(0, 1) === 0 ? "6AM" : "7AM",
         endWorkingTime: getRandomInt(0, 1) === 0 ? "8PM" : "9PM",
@@ -388,4 +391,4 @@ const main = async (genData = false) => {
   console.log(JSON.stringify(booking, null, 2));
 };
 
-// main(true);
+main(true);

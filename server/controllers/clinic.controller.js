@@ -9,6 +9,7 @@ const Doctor = require("../models/Doctor");
 const Booking = require("../models/Booking");
 const userController = require("./user.controller");
 const User = require("../models/User");
+const { findById } = require("../models/Clinic");
 
 const clinicController = {};
 
@@ -73,11 +74,9 @@ clinicController.getListOfClinic = catchAsync(async (req, res, next) => {
 
 //  Clinic can see the booking request
 clinicController.acceptBookingRequest = catchAsync(async (req, res, next) => {
-  const clinicId = req.clinicId; //To
-  const fromUserId = req.params.id; //From
+  const bookingId = req.params.id; //From
   let bookingRelate = await Booking.findOne({
-    from: fromUserId,
-    to: clinicId,
+    _id: bookingId,
     status: "Pending",
   });
   if (!bookingRelate) {
@@ -89,7 +88,7 @@ clinicController.acceptBookingRequest = catchAsync(async (req, res, next) => {
       )
     );
   }
-  bookingRelate.status = "done";
+  bookingRelate.status = "Active";
   await bookingRelate.save();
   return sendResponse(res, 200, true, null, null, "Booking has been accepted");
 });
@@ -115,8 +114,9 @@ clinicController.cancelBookingRequest = catchAsync(async (req, res, next) => {
 
 //  Clinic can see the list of booking
 clinicController.getBookingListUser = catchAsync(async (req, res, next) => {
-  let { page, litmit, sortBy, ...filter } = { ...req.body };
-  const userId = req.userId;
+  let { page, limit, sortBy, ...filter } = { ...req.query };
+  const currentUser = req.userId;
+  clinicId = await Booking.findById({ clinic: clinic._id });
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;
 
@@ -124,8 +124,7 @@ clinicController.getBookingListUser = catchAsync(async (req, res, next) => {
     from: userId,
     status: "Pending",
   });
-  const clinicIDs = bookingList.map((bookingRelate) => {
-    if (bookingRelate.from._id.equals(userId)) return bookingRelate.to;
+  const clinicIDs = bookingRelate.map((bookingRelate) => {
     return bookingRelate.from;
   });
 

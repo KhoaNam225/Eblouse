@@ -105,4 +105,6 @@ userController.getUsers = catchAsync(async (req, res, next) => {
 //   );
 // });
 
+userController.createNewBooking = catchAsync(async (req, res, next) => {});
+
 module.exports = userController;
