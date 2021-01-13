@@ -1,6 +1,7 @@
 import api from "../../apiService";
 import * as types from "../constants/clinics.constants";
 import { toast } from "react-toastify";
+import routeActions from "../actions/route.actions";
 
 const getClinic = (clinicId) => async (dispatch) => {
   dispatch({ type: types.GET_CLINIC_REQUEST, payload: null });

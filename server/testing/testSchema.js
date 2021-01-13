@@ -391,4 +391,4 @@ const main = async (genData = false) => {
   console.log(JSON.stringify(booking, null, 2));
 };
 
-main(true);
+// main(true);

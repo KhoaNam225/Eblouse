@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { MultiItemsCarousel } from "../components/Carousel";
 import reviewsActions from "../redux/actions/reviews.actions";
+import authActions from "../redux/actions/auth.actions";
 import "../style/HomePage.css";
 
 const HomePage = () => {
@@ -12,9 +13,11 @@ const HomePage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(reviewsActions.getReviews());
-  // }, [dispatch]);
+  const clinicId = useSelector((states) => states.auth.user._id);
+
+  useEffect(() => {
+    dispatch(authActions.getReviews(clinicId));
+  }, [dispatch]);
 
   const getReviewCardsList = () => {
     const cards = reviews.map((review) => (

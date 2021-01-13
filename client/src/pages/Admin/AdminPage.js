@@ -1,18 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Container } from "react-bootstrap";
+import React from "react";
 
 const AdminPage = () => {
-  return <Container>
-<div className="menu-top">
-
-</div>
-<section className="content">
-  <div className="col-4">
-
-  </div>
-  <div className=""
-</section>
-  </Container>
+  return <div>Admin Page</div>;
 };
 
 export default AdminPage;
