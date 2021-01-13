@@ -17,6 +17,13 @@ const reviewsReducer = (state = initialState, action) => {
     case types.GET_REVIEWS_FAILURE:
       return { ...state, isLoading: false };
 
+    case types.GET_RANDOM_REVIEWS_REQUEST:
+      return { ...state, isLoading: true };
+    case types.GET_RANDOM_REVIEWS_SUCCESS:
+      return { ...state, isLoading: false, reviews: payload };
+    case types.GET_RANDOM_REVIEWS_FAILURE:
+      return { ...state, isLoading: false };
+
     case types.CREATE_REVIEW_REQUEST:
       return { ...state, isLoading: true };
     case type.CREATE_REVIEW_SUCCESS:

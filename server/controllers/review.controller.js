@@ -5,6 +5,7 @@ const {
 } = require("../helpers/utils.helper");
 const Clinic = require("../models/Clinic");
 const Review = require("../models/Review");
+const User = require("../models/User");
 const reviewController = {};
 
 reviewController.createNewReview = catchAsync(async (req, res, next) => {
@@ -31,6 +32,24 @@ reviewController.createNewReview = catchAsync(async (req, res, next) => {
     review,
     null,
     "Create new review successful"
+  );
+});
+
+reviewController.getRandomReview = catchAsync(async (req, res, next) => {
+  const reviews = await Review.find({})
+    .populate("user", ["name", "avatarUrl"])
+    .populate("clinic", "name");
+  if (!reviews)
+    return next(
+      new AppError(400, "Reviews not found ", "get random review error")
+    );
+  return sendResponse(
+    res,
+    200,
+    true,
+    reviews,
+    null,
+    "get random reviews sucessful"
   );
 });
 

@@ -25,7 +25,71 @@ const PublicNavbar = () => {
   const [showUserDetailInputModal, setShowUserDetailInputModel] = useState(
     false
   );
-  return <div></div>;
-};
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isLoading = useSelector((state) => state.auth.loading);
+
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setScrollOffsetY(position);
+  };
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleHideModal = () => {
+    setShowModal(true);
+  };
+
+  const showUserDetailModal = () => {
+    setShowUserDetailInputModel(true);
+  };
+
+  const hideUserDetailModal = () => {
+    setShowUserDetailInputModel(false);
+  };
+
+  const handleUserLogin = () => {
+    dispatch(usersActions.userLogin());
+    setShowModal(false);
+    setShowUserDetailInputModel(false);
+  };
+  const loginWithFacebook = (response) => {
+    dispatch(authActions.loginFacebook(response.acessToken));
+    setShowModal(false);
+    setShowUserDetailInputModel(false);
+  };
+  const loginWithGoogle = (response) => {
+    dispatch(authActions.loginGoogle(response.acessToken));
+    setShowModal(false);
+    setShowUserDetailInputModel(false);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const FullNavBar = () => {
+    return (
+      <>
+      <div className="nav-bar">
+        <div id="logo">
+          <img src={logo} alt="Eblouse" width="100px"/>
+        </div>
+        <div className="nav-middle">
+          <button className="nav-btn">
+            Book an appointment
+          </button>
+        </div>
+      </div>
+      </>
+    )
+  }
 
 export default PublicNavbar;

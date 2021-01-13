@@ -15,6 +15,18 @@ const getReview = (clinicId, pageNum = 1, limit = 10) => async (dispatch) => {
     dispatch({ types: types.GET_REVIEWS_FAILURE, payload: error });
   }
 };
+const getRandomReviews = () => async (dispatch) => {
+  dispatch({ type: types.GET_RANDOM_REVIEWS_REQUEST, payload: null });
+  try {
+    const res = await api.get(`/review/`);
+    dispatch({
+      type: types.GET_RANDOM_REVIEWS_SUCCESS,
+      payload: res.data.data,
+    });
+  } catch (error) {
+    dispatch({ types: types.GET_RANDOM_REVIEWS_FAILURE, payload: error });
+  }
+};
 
 const editReviews = (reviewId, content, accessToken) => async (dispatch) => {
   dispatch({ type: types.EDIT_REVIEW_REQUEST, payload: null });
@@ -64,6 +76,7 @@ const createReviews = (clinicId, reviewText) => async (dispatch) => {
 
 const reviewActions = {
   getReview,
+  getRandomReviews,
   createReviews,
   editReviews,
   deleteReviews,
