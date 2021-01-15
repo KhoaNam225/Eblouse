@@ -18,13 +18,13 @@ const getReview = (clinicId, pageNum = 1, limit = 10) => async (dispatch) => {
 const getRandomReviews = () => async (dispatch) => {
   dispatch({ type: types.GET_RANDOM_REVIEWS_REQUEST, payload: null });
   try {
-    const res = await api.get(`/review/`);
-    dispatch({
-      type: types.GET_RANDOM_REVIEWS_SUCCESS,
-      payload: res.data.data,
-    });
+    const respond = await api.get("/review/");
+    const reviews = respond.data.data;
+
+    dispatch({ type: types.GET_RANDOM_REVIEWS_SUCCESS, payload: reviews });
   } catch (error) {
-    dispatch({ types: types.GET_RANDOM_REVIEWS_FAILURE, payload: error });
+    toast.error(error.message);
+    dispatch({ type: types.GET_RANDOM_REVIEWS_FAILURE, payload: null });
   }
 };
 

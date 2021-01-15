@@ -6,7 +6,6 @@ const {
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 // const Conversation = require("../models/Conversation");
-// const emailHelper = require("../helpers/email.helper");
 
 const userController = {};
 
@@ -26,15 +25,15 @@ userController.register = catchAsync(async (req, res, next) => {
   });
   const accessToken = await user.generateToken();
 
-  const emailData = await emailHelper.renderEmailTemplate(
-    "welcome_email",
-    { name: name },
-    email
-  );
+  // const emailData = await emailHelper.renderEmailTemplate(
+  //   "welcome_email",
+  //   { name: name },
+  //   email
+  // );
 
-  if (!emailData.error) {
-    emailHelper.send(emailData);
-  }
+  // if (!emailData.error) {
+  //   emailHelper.send(emailData);
+  // }
 
   return sendResponse(
     res,

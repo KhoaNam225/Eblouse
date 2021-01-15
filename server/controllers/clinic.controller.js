@@ -114,54 +114,46 @@ clinicController.cancelBookingRequest = catchAsync(async (req, res, next) => {
 
 //  Clinic can see the list of booking
 clinicController.getBookingListUser = catchAsync(async (req, res, next) => {
-  let { page, limit, sortBy, ...filter } = { ...req.query };
-  const currentUser = req.userId;
-  clinicId = await Booking.findById({ clinic: clinic._id });
-  page = parseInt(page) || 1;
-  limit = parseInt(limit) || 10;
+  // let { page, limit, sortBy, ...filter } = { ...req.query };
+  const currentUser = req.params.id;
+
+  // page = parseInt(page) || 1;
+  // limit = parseInt(limit) || 10;
 
   let bookingRelate = await Booking.find({
-    from: userId,
-    status: "Pending",
-  });
-  const clinicIDs = bookingRelate.map((bookingRelate) => {
-    return bookingRelate.from;
+    $or: [{ user: currentUser }, { clinic: currentUser }],
+    status: 1,
   });
 
-  const totalBooking = await User.countDocuments({
-    ...filter,
-    isDeletedFalse: false,
-    _id: { $in: clinicIDs },
-  });
-  const totalPages = Math.ceil(totalBooking / limit);
-  const offset = limit * (page - 1);
+  // const list = bookingRelate.map((bookingRelate) => {
+  //   if (bookingRelate.user._id.euqals(userId)) return bookingRelate.clinic;
+  //   return bookingRelate.user;
+  // });
 
-  let clinics = await Clinic.find({ ...filter, _id: { $in: clinicIDs } })
-    .sort({ ...sortBy, createAt: -1 })
-    .skip(offset)
-    .limit(limit);
-  const promises = users.map(async (user) => {
-    let temp = user.toJSON();
+  // const totalBooking = await User.countDocuments({
+  //   ...filter,
+  //   isDeletedFalse: false,
+  //   _id: { $in: clinicIDs },
+  // });
+  // const totalPages = Math.ceil(totalBooking / limit);
+  // const offset = limit * (page - 1);
 
-    temp.bookingRelate = bookingRelate.find((bookingRelate) => {
-      if (bookingRelate.from.equals(user._id)) {
-        return { status: bookingRelate.status };
-      }
-      return false;
-    });
-    return temp;
-  });
-  const bookingRequestList = await Promise.all(promises);
-  return sendResponse(
-    res,
-    200,
-    true,
-    {
-      bookings: bookingRequestList,
-      totalPages,
-    },
-    null,
-    null
-  );
+  // let clinics = await Clinic.find({ ...filter, _id: { $in: clinicIDs } })
+  //   .sort({ ...sortBy, createAt: -1 })
+  //   .skip(offset)
+  //   .limit(limit);
+  // const promises = users.map(async (user) => {
+  //   let temp = user.toJSON();
+
+  //   temp.bookingRelate = bookingRelate.find((bookingRelate) => {
+  //     if (bookingRelate.from.equals(user._id)) {
+  //       return { status: bookingRelate.status };
+  //     }
+  //     return false;
+  //   });
+  //   return temp;
+  // });
+  // const bookingRequestList = await Promise.all(promises);
+  return sendResponse(res, 200, true, bookingRelate, null, null);
 });
 module.exports = clinicController;

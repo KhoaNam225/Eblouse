@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const { AppError } = require("../helpers/utils.helper");
+const Clinic = require("../models/Clinic");
 const authMiddleware = {};
 
 authMiddleware.loginRequired = (req, res, next) => {
@@ -27,5 +28,23 @@ authMiddleware.loginRequired = (req, res, next) => {
     next(error);
   }
 };
-
+authMiddleware.verifyAdmin = async (req, res, next) => {
+  try {
+    const currentUser = req.params.id;
+    let admin = await Clinic.findOne({ _id: currentUser });
+    if (!admin) {
+      return next(new AppError(400, "admin not found", "check admin error"));
+    }
+    return sendResponse(
+      res,
+      200,
+      true,
+      { admin },
+      null,
+      "Create user successful"
+    );
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = authMiddleware;

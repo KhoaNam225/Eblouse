@@ -11,7 +11,7 @@ import BookingConfirm from "../pages/BookingConfirm";
 import PrivateRoute from "./PrivateRoute";
 // import SearchListPage from "../pages/SearchListPage";
 import AdminPage from "../pages/Admin/AdminPage";
-
+import Footer from "../components/Footer";
 // import "../style/main.css";
 import { Container } from "react-bootstrap";
 
@@ -41,6 +41,7 @@ const PublicLayout = () => {
           <Route exact component={NotFoundPage} />
         </Switch>
       </Container>
+      <Footer />
     </>
   );
 };
