@@ -5,6 +5,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { MultiItemsCarousel } from "../components/Carousel";
 import reviewsActions from "../redux/actions/reviews.actions";
 import "../style/HomePage.css";
+import screen from "../images/screen.png";
 
 const HomePage = () => {
   const reviews = useSelector((states) => states.reviews.reviews);
@@ -27,7 +28,7 @@ const HomePage = () => {
         rating={review.rating}
         key={review._id}
         onClick={() => {
-          history.push("/clinic/5ff8190e5755f18df89c80e8");
+          history.push(`/clinic/${review.clinic._id}`);
         }}
       />
     ));
@@ -37,7 +38,6 @@ const HomePage = () => {
 
   return (
     <div className="wrapper">
-      {/* first paragraph */}
       <section className="slogan">
         <h1 className="feel">Feeling mehh? Find a doctor.</h1>
       </section>
@@ -56,10 +56,10 @@ const HomePage = () => {
       <section id="between2">
         <div className="container2">
           <div className="hinh-screen">
-            <img src="" alt="iphone-img" className="iphone-img" />
+            <img src={screen} alt="iphone-img" className="iphone-img" />
           </div>
           <div className="lis-right">
-            <h1 className="get-app">Get the Eblouse app.</h1>
+            <h2 className="get-app">Get the Eblouse app.</h2>
             <ul className="list-one">
               <li className="list-1">Find nearly doctors in your area</li>
               <li className="list-1">Browse real patient reviews</li>
@@ -75,7 +75,7 @@ const HomePage = () => {
       <section id="between3">
         <div className="container3">
           <div className="h2-list">
-            <h1 className="are-you-doctor">Are you a five-star clinic?</h1>
+            <h2 className="are-you-doctor">Are you a five-star clinic?</h2>
             <h2 className="bet3">
               List your practice to reach millions of patients
             </h2>

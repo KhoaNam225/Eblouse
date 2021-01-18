@@ -9,18 +9,37 @@ const Doctor = require("../models/Doctor");
 const Booking = require("../models/Booking");
 const userController = require("./user.controller");
 const User = require("../models/User");
+const Specialization = require("../models/Specialization");
 const { findById } = require("../models/Clinic");
 
 const clinicController = {};
 
 //  user can search clinic by query in category
-clinicController.getSearchCategory = catchAsync(async (req, res, next) => {
-  let { query } = req.query;
-  let clinicList = await Clinic.findOne({ query });
-  if (!clinicList)
-    return next(new AppError(404, "Sepecialization not found", "Query Error"));
-  return sendResponse(res, 200, true, { clinicList }, null, "Query success");
-});
+// clinicController.getSearchCategory = catchAsync(async (req, res, next) => {
+//   // let query = req.body.query;
+//   let { query } = req.query;
+//   console.log("ADA", query);
+
+//   let clinicList = await Clinic.find({}).populate("specializations");
+
+//   clinicList = clinicList.filter(function (clinic) {
+//     let specs = clinic.specializations;
+//     for (let i = 0; i < specs.length; i++) {
+//       if (specs[i].name == query) return true;
+//     }
+//     return false;
+//   });
+//   if (!clinicList)
+//     return next(new AppError(404, "Sepecialization not found", "Query Error"));
+//   return sendResponse(
+//     res,
+//     200,
+//     true,
+//     { query, clinicList },
+//     null,
+//     "Query success"
+//   );
+// });
 
 //  user can get detail of clinic
 clinicController.getSingleClinic = catchAsync(async (req, res, next) => {
@@ -53,14 +72,18 @@ clinicController.getSingleClinic = catchAsync(async (req, res, next) => {
 
 // user can see the clinic list
 clinicController.getListOfClinic = catchAsync(async (req, res, next) => {
-  let { page, limit } = { ...req.query };
+  let { page, limit, sortBy, ...filter } = { ...req.query };
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;
-  const totalClinic = await Clinic.countDocuments();
+  const totalClinic = await Clinic.countDocuments({ ...filter });
   const totalPages = Math.ceil(totalClinic / limit);
   const offset = limit * (page - 1);
 
-  const clinics = await Clinic.find({}).skip(offset).limit(limit);
+  const clinics = await Clinic.find({ filter })
+    .sort({ ...sortBy, createAt: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate("specialization");
 
   return sendResponse(
     res,
@@ -114,7 +137,7 @@ clinicController.cancelBookingRequest = catchAsync(async (req, res, next) => {
 
 //  Clinic can see the list of booking
 clinicController.getBookingListUser = catchAsync(async (req, res, next) => {
-  // let { page, limit, sortBy, ...filter } = { ...req.query };
+  let { page, limit, sortBy, ...filter } = { ...req.query };
   const currentUser = req.params.id;
 
   // page = parseInt(page) || 1;

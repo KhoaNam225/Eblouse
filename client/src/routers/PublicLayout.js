@@ -9,7 +9,7 @@ import ClinicDetailPage from "../pages/ClinicDetailPage";
 import BookingDetailPage from "../pages/BookingDetailPage";
 import BookingConfirm from "../pages/BookingConfirm";
 import PrivateRoute from "./PrivateRoute";
-// import SearchListPage from "../pages/SearchListPage";
+import SearchListPage from "../pages/SearchListPage";
 import AdminPage from "../pages/Admin/AdminPage";
 import Footer from "../components/Footer";
 // import "../style/main.css";
@@ -25,7 +25,7 @@ const PublicLayout = () => {
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/info" component={InformationPage} />
           <Route exact path="/clinic/:id" component={ClinicDetailPage} />
-          {/* <Route exac path="/search" component={SearchListPage} /> */}
+          <Route exact path="/search/:searchTerm" component={SearchListPage} />
           <PrivateRoute exact path="/login/clinic" component={LoginPage} />
           <PrivateRoute exact path="/admin/clinic/" component={AdminPage} />
           <PrivateRoute

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { GoogleLogin } from "react-google-login";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import authActions from "../redux/actions/auth.actions";
 import logo from "../images/ebloue-logo.png";
 import "../style/PublicNavBar.css";
@@ -14,7 +15,7 @@ const PublicNavBar = () => {
   const BOOKING_SEARCH_MODE = 1;
   const REVIEWS_SEARCH_MODE = 2;
 
-  const [clinicName, setClinicName] = useState("");
+  const [category, setCategory] = useState("");
   const [date, setDate] = useState(null);
   const [peopleNum, setPeopleNum] = useState(0);
   const [searchMode, setSearchMode] = useState(BOOKING_SEARCH_MODE);
@@ -29,6 +30,12 @@ const PublicNavBar = () => {
   const user = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isLoading = useSelector((state) => state.auth.loading);
+  const history = useHistory();
+
+  const handleSubmitCategory = () => {
+    history.push(`/search/${category}`);
+    history.go(0);
+  };
 
   const handleScroll = () => {
     const position = window.pageYOffset;
@@ -147,7 +154,11 @@ const PublicNavBar = () => {
               ) : null}
             </div>
             {searchMode === BOOKING_SEARCH_MODE ? (
-              <BookingSearchBar />
+              <BookingSearchBar
+                category={category}
+                setCategory={setCategory}
+                onSubmit={handleSubmitCategory}
+              />
             ) : (
               <ReviewsSearchBar />
             )}
@@ -401,8 +412,8 @@ const PublicNavBar = () => {
 };
 
 const BookingSearchBar = ({
-  clinicName,
-  setClinicName,
+  category,
+  setCategory,
   date,
   setDate,
   peopleNum,
@@ -415,6 +426,7 @@ const BookingSearchBar = ({
         <div
           id="location-input-box"
           className="search-component"
+          //click and that will have style & box shadow for this id
           onFocus={() => {
             const box = document.getElementById("location-input-box");
             box.classList.add("right-shadow-box");
@@ -425,7 +437,12 @@ const BookingSearchBar = ({
           }}
         >
           <label>Location</label>
-          <input type="text" value={clinicName} placeholder="Clinic name" />
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder="Clinic name"
+          />
         </div>
         <div className="split-bar"></div>
         <div
