@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-import PublicNavbar from "../components/PublicNavbar";
+import { PublicNavBar } from "../components/navbar";
+import Footer from "../components/Footer";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import InformationPage from "../pages/InformationPage";
@@ -10,24 +11,24 @@ import BookingDetailPage from "../pages/BookingDetailPage";
 import BookingConfirm from "../pages/BookingConfirm";
 import PrivateRoute from "./PrivateRoute";
 import SearchListPage from "../pages/SearchListPage";
-import AdminPage from "../pages/Admin/AdminPage";
-import Footer from "../components/Footer";
-// import "../style/main.css";
+// import ClinicLoginPage from "../pages/ClinicLoginPage";
+// import AdminPage from "../pages/Admin/AdminPage";
+
+import "../style/main.css";
 import { Container } from "react-bootstrap";
 
 const PublicLayout = () => {
   return (
     <>
-      <PublicNavbar />
+      <PublicNavBar />
       <Container style={{ padding: 0 }} fluid>
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/info" component={InformationPage} />
           <Route exact path="/clinic/:id" component={ClinicDetailPage} />
-          <Route exact path="/search/:searchTerm" component={SearchListPage} />
-          <PrivateRoute exact path="/login/clinic" component={LoginPage} />
-          <PrivateRoute exact path="/admin/clinic/" component={AdminPage} />
+          {/* <Route exac path="/search" component={SearchListPage} /> */}
+          {/* <Route exact path="/login/clinic" component={ClinicLoginPage} /> */}
           <PrivateRoute
             exact
             path="/booking/:id"

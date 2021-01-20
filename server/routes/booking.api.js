@@ -4,6 +4,8 @@ const { body, param } = require("express-validator");
 const router = express.Router();
 const clinicController = require("../controllers/clinic.controller");
 const validators = require("../middlewares/validator");
+const userController = require("../controllers/user.controller");
+const authMiddleware = require("../middlewares/authentication");
 
 /**
  * @route GET api/booking/:id
@@ -30,15 +32,15 @@ router.get("/:id", clinicController.getBookingListUser);
  * @description Create a new booking for a booking
  * @access Login required
  */
-// router.post(
-//   "/booking/:id",
-//   // authMiddleware.loginRequired,
-//   validators.validate([
-//     param("id").exists().isString().custom(validators.checkObjectId),
-//     body("content", "Missing content").exists().notEmpty(),
-//   ]),
-//   clinicController.createNewBooking
-// );
+router.post(
+  "/:id",
+  authMiddleware.loginRequired,
+  // validators.validate([
+  //   param("id").exists().isString().custom(validators.checkObjectId),
+  //   body("content", "Missing content").exists().notEmpty(),
+  // ]),
+  userController.createNewBooking
+);
 
 /**
  * @route POST api/booking/add/:id

@@ -30,7 +30,7 @@ const clinicController = {};
 //     return false;
 //   });
 //   if (!clinicList)
-//     return next(new AppError(404, "Sepecialization not found", "Query Error"));
+//     return next(new Ap pError(404, "Sepecialization not found", "Query Error"));
 //   return sendResponse(
 //     res,
 //     200,

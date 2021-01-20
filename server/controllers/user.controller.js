@@ -5,6 +5,8 @@ const {
 } = require("../helpers/utils.helper");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const Clinic = require("../models/Clinic");
+const Booking = require("../models/Booking");
 // const Conversation = require("../models/Conversation");
 
 const userController = {};
@@ -104,6 +106,57 @@ userController.getUsers = catchAsync(async (req, res, next) => {
 //   );
 // });
 
-userController.createNewBooking = catchAsync(async (req, res, next) => {});
+userController.createNewBooking = catchAsync(async (req, res, next) => {
+  const userID = req.userId;
+  const toClinicId = req.params.id;
+
+  const clinic = await Clinic.findById(toClinicId);
+  if (!clinic) {
+    return next(
+      new AppError(400, "Clinic not found", "Send booking request error")
+    );
+  }
+  let bookingRelate = await Booking.findOne({
+    from: userID,
+    clinic: toClinicId,
+  });
+  if (!bookingRelate) {
+    await Booking.create({
+      from: userID,
+      clinic: toClinicId,
+      status: "Pending",
+      startTime,
+      endTime,
+    });
+    return sendResponse(res, 200, true, null, null, "Request has been sent");
+  } else {
+    switch (bookingRelate.status) {
+      case "Pending":
+        return next(
+          new AppError(
+            400,
+            "You have received a request from this user",
+            "Send request success"
+          )
+        );
+        break;
+      case "Active":
+        return next(
+          new AppError(400, "your booking has been booked ", "Booking error")
+        );
+        break;
+      case "Cancelled":
+      case "Done":
+        bookingRelate.from = userID;
+        bookingRelate.clinic = toClinicId;
+        bookingRelate.status = "Pending";
+        await bookingRelate.save();
+        return sendResponse(res, 200, null, null, "Request has been sent");
+        break;
+      default:
+        break;
+    }
+  }
+});
 
 module.exports = userController;

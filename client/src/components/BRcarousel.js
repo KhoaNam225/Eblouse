@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Carousel } from "react-bootstrap";
 
-const BRcarousel = () => {
+const BRcarousel = ({ images }) => {
   const [index, setIndex] = useState();
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
@@ -9,7 +9,12 @@ const BRcarousel = () => {
 
   return (
     <Carousel onSelect={handleSelect}>
-      <Carousel.Item className="sm">
+      {images.map((image) => (
+        <Carousel.Item className="sm">
+          <img className="d-block w-100" src={image} alt="clinic images" />
+        </Carousel.Item>
+      ))}
+      {/* <Carousel.Item className="sm">
         <img
           className="d-block w-100"
           src="https://media.istockphoto.com/photos/healthcare-photos-picture-id954802966?k=6&m=954802966&s=612x612&w=0&h=wQ35IRVMHGPLLbvpRVO1ADS_ce6VwbGaGzPkEP-69oM="
@@ -29,7 +34,7 @@ const BRcarousel = () => {
           src="https://easysalon.vn/wp-content/uploads/2019/11/clinic-spa-la-gi-1.jpg"
           alt="Third slide"
         />
-      </Carousel.Item>
+      </Carousel.Item> */}
     </Carousel>
   );
 };
