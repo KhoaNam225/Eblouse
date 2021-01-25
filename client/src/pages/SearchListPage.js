@@ -36,9 +36,10 @@ const SearchListPage = () => {
       <section className="list-of-clinics">
         <hr />
         <div className="first-item d-flex">
-          {clinics.map((clinic) => (
+          {/* {clinics.map((clinic) => (
             <Card clinic={clinic} />
-          ))}
+          ))} */}
+          <Card />
           <div className="text-below"></div>
         </div>
 

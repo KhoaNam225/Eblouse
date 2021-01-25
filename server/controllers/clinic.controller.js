@@ -9,37 +9,33 @@ const Doctor = require("../models/Doctor");
 const Booking = require("../models/Booking");
 const userController = require("./user.controller");
 const User = require("../models/User");
-const Specialization = require("../models/Specialization");
 const { findById } = require("../models/Clinic");
 
 const clinicController = {};
 
-//  user can search clinic by query in category
-// clinicController.getSearchCategory = catchAsync(async (req, res, next) => {
-//   // let query = req.body.query;
-//   let { query } = req.query;
-//   console.log("ADA", query);
+clinicController.getSearchCategory = catchAsync(async (req, res, next) => {
+  let query = req.body.query;
+  let clinicList = await Clinic.find({}).populate("specializations");
 
-//   let clinicList = await Clinic.find({}).populate("specializations");
+  clinicList = clinicList.filter(function (clinic) {
+    let specs = clinic.specializations;
+    for (let i = 0; i < specs.length; i++) {
+      if (specs[i].name == query) return true;
+    }
+    return false;
+  });
 
-//   clinicList = clinicList.filter(function (clinic) {
-//     let specs = clinic.specializations;
-//     for (let i = 0; i < specs.length; i++) {
-//       if (specs[i].name == query) return true;
-//     }
-//     return false;
-//   });
-//   if (!clinicList)
-//     return next(new Ap pError(404, "Sepecialization not found", "Query Error"));
-//   return sendResponse(
-//     res,
-//     200,
-//     true,
-//     { query, clinicList },
-//     null,
-//     "Query success"
-//   );
-// });
+  if (!clinicList)
+    return next(new AppError(404, "Sepecialization not found", "Query Error"));
+  return sendResponse(
+    res,
+    200,
+    true,
+    { query, clinicList },
+    null,
+    "Query success"
+  );
+});
 
 //  user can get detail of clinic
 clinicController.getSingleClinic = catchAsync(async (req, res, next) => {
@@ -98,6 +94,7 @@ clinicController.getListOfClinic = catchAsync(async (req, res, next) => {
 //  Clinic can see the booking request
 clinicController.acceptBookingRequest = catchAsync(async (req, res, next) => {
   const bookingId = req.params.id; //From
+  console.log(bookingId);
   let bookingRelate = await Booking.findOne({
     _id: bookingId,
     status: "Pending",
@@ -111,15 +108,16 @@ clinicController.acceptBookingRequest = catchAsync(async (req, res, next) => {
       )
     );
   }
-  bookingRelate.status = "Active";
+  bookingRelate.status = "Accepted";
   await bookingRelate.save();
   return sendResponse(res, 200, true, null, null, "Booking has been accepted");
 });
+
 clinicController.cancelBookingRequest = catchAsync(async (req, res, next) => {
   const bookingId = req.params.id; //From
   let bookingRelate = await Booking.findOne({
     _id: bookingId,
-    status: "Pending",
+    $or: [{ status: "Pending" }, { status: "Accepted" }],
   });
   if (!bookingRelate) {
     return next(
@@ -140,43 +138,13 @@ clinicController.getBookingListUser = catchAsync(async (req, res, next) => {
   let { page, limit, sortBy, ...filter } = { ...req.query };
   const currentUser = req.params.id;
 
-  // page = parseInt(page) || 1;
-  // limit = parseInt(limit) || 10;
-
   let bookingRelate = await Booking.find({
     $or: [{ user: currentUser }, { clinic: currentUser }],
-    status: 1,
-  });
+  })
+    .populate("doctor")
+    .populate("user");
 
-  // const list = bookingRelate.map((bookingRelate) => {
-  //   if (bookingRelate.user._id.euqals(userId)) return bookingRelate.clinic;
-  //   return bookingRelate.user;
-  // });
-
-  // const totalBooking = await User.countDocuments({
-  //   ...filter,
-  //   isDeletedFalse: false,
-  //   _id: { $in: clinicIDs },
-  // });
-  // const totalPages = Math.ceil(totalBooking / limit);
-  // const offset = limit * (page - 1);
-
-  // let clinics = await Clinic.find({ ...filter, _id: { $in: clinicIDs } })
-  //   .sort({ ...sortBy, createAt: -1 })
-  //   .skip(offset)
-  //   .limit(limit);
-  // const promises = users.map(async (user) => {
-  //   let temp = user.toJSON();
-
-  //   temp.bookingRelate = bookingRelate.find((bookingRelate) => {
-  //     if (bookingRelate.from.equals(user._id)) {
-  //       return { status: bookingRelate.status };
-  //     }
-  //     return false;
-  //   });
-  //   return temp;
-  // });
-  // const bookingRequestList = await Promise.all(promises);
   return sendResponse(res, 200, true, bookingRelate, null, null);
 });
+
 module.exports = clinicController;

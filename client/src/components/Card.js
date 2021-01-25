@@ -7,10 +7,11 @@ const Card = ({ clinic }) => {
     <Container>
       <div className="all">
         <div className="carousel">
-          <BRcarousel image={clinic.images} />
+          <BRcarousel />
+          {/* image={clinic.images} */}
         </div>
         <div className="information">
-          <h3>{clinic.name}</h3>
+          {/* <h3>{clinic.name}</h3> */}
           <h1>address</h1>
           <hr className="short-line" />
           <br></br>

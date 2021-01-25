@@ -121,7 +121,7 @@ const createRandomUsers = async (userNum) => {
         name: faker.name.findName(),
         email: faker.internet.email().toLowerCase(),
         password: password,
-        avatarUrl: faker.image.avatar(),
+        avatarUrl: faker.image.food(),
       });
 
       console.log(`Created user ${user._id}`);
@@ -158,6 +158,7 @@ const createRandomDoctors = async (
       let doctor = await Doctor.create({
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
+        avatarUrl: faker.image.cats(),
         gender: genders[getRandomInt(0, genders.length - 1)],
         status: status[getRandomInt(0, status.length - 1)],
         qualification: qual._id,
@@ -190,8 +191,9 @@ const createRandomClinic = async (
     console.log("------------------------------");
     const languages = ["Vietnamese", "English", "Chinese", "Korean"];
     const clinics = [];
-    const salt = await bcrypt.genSalt(10);
-    const password = await bcrypt.hash("123", salt);
+    // const salt = await bcrypt.genSalt(10);
+    // const password = await bcrypt.hash("123", salt);
+    const password = "123";
     for (let index = 0; index < clinicsNum; index++) {
       let images = [];
       for (let i = 0; i < 5; i++) {
@@ -287,7 +289,7 @@ const createRandomReview = async (users, clinics) => {
 const createRandomBooking = async (users, clinics) => {
   console.log("hahdud", users);
   try {
-    console.log("CREATING 5 BOOKINGS FOR EACH CLINIC");
+    console.log("CREATING 10 BOOKINGS FOR EACH CLINIC");
     console.log("------------------------------");
     const status = ["Pending", "Active", "Cancelled", "Done"];
     const bookings = [];
@@ -296,7 +298,7 @@ const createRandomBooking = async (users, clinics) => {
       let clinic = clinics[index];
       let doctors = clinic.doctors;
 
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 10; i++) {
         let userIndex = getRandomInt(0, users.length - 1);
         let user = users[userIndex];
 
@@ -306,21 +308,45 @@ const createRandomBooking = async (users, clinics) => {
           `Creating booking for user ${user._id}, clinic ${clinic._id}, doctor ${doctor}`
         );
 
-        let done = getRandomInt(0, 5) === 0 ? true : false;
         let startTime = null;
         let endTime = null;
         let stat = null;
 
-        if (done) {
-          startTime = faker.date.past();
-          stat = "Done";
-        } else {
-          startTime = faker.date.soon(3, new Date());
-          stat = status[getRandomInt(0, status.length - 2)];
+        switch (i) {
+          case 0:
+          case 1:
+            startTime = faker.date.past();
+            stat = "Done";
+            break;
+
+          case 2:
+          case 3:
+          case 8:
+            startTime = faker.date.soon(3, new Date());
+            stat = "Pending";
+            break;
+
+          case 4:
+          case 5:
+          case 9:
+            startTime = faker.date.soon(3, new Date());
+            stat = "Accepted";
+            break;
+
+          case 6:
+          case 7:
+            startTime = faker.date.soon(3, new Date());
+            stat = "Cancelled";
+            break;
         }
 
+        if (getRandomInt(0, 1) == 0) {
+          startTime.setHours(getRandomInt(8, 10), 0, 0);
+        } else {
+          startTime.setHours(getRandomInt(13, 15), 0, 0);
+        }
         endTime = new Date(startTime.getTime() + 3600 * 1000);
-
+        let reason = faker.lorem.sentence();
         let booking = await Booking.create({
           user: user._id,
           clinic: clinic._id,
@@ -328,6 +354,7 @@ const createRandomBooking = async (users, clinics) => {
           startTime: startTime,
           endTime: endTime,
           status: stat,
+          reason: reason,
         });
 
         bookings.push(booking);
@@ -348,17 +375,17 @@ const main = async (genData = false) => {
     const specializations = await createSpecialization();
     const services = await createClinicService();
     const qualifications = await createQualification();
-    const users = await createRandomUsers(15);
+    const users = await createRandomUsers(25);
     const doctors = await createRandomDoctors(
       qualifications,
       specializations,
-      10
+      20
     );
     const clinics = await createRandomClinic(
       doctors,
       services,
       specializations,
-      2
+      5
     );
     const reviews = await createRandomReview(users, clinics);
     const bookings = await createRandomBooking(users, clinics);
@@ -384,11 +411,11 @@ const main = async (genData = false) => {
   console.log(`Booking: ${booking.length} bookings`);
 
   console.log("Done!");
-  booking = await Booking.find({})
-    .populate("doctor")
-    .populate("clinic")
-    .populate("user");
-  console.log(JSON.stringify(booking, null, 2));
+  // booking = await Booking.find({})
+  //   .populate("doctor")
+  //   .populate("clinic")
+  //   .populate("user");
+  // console.log(JSON.stringify(booking, null, 2));
 };
 
 // main(true);

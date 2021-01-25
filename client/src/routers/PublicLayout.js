@@ -11,8 +11,6 @@ import BookingDetailPage from "../pages/BookingDetailPage";
 import BookingConfirm from "../pages/BookingConfirm";
 import PrivateRoute from "./PrivateRoute";
 import SearchListPage from "../pages/SearchListPage";
-// import ClinicLoginPage from "../pages/ClinicLoginPage";
-// import AdminPage from "../pages/Admin/AdminPage";
 
 import "../style/main.css";
 import { Container } from "react-bootstrap";

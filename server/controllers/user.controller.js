@@ -4,10 +4,11 @@ const {
   sendResponse,
 } = require("../helpers/utils.helper");
 const User = require("../models/User");
+const Booking = require("../models/Booking");
 const bcrypt = require("bcryptjs");
 const Clinic = require("../models/Clinic");
-const Booking = require("../models/Booking");
 // const Conversation = require("../models/Conversation");
+// const emailHelper = require("../helpers/email.helper");
 
 const userController = {};
 
@@ -27,15 +28,15 @@ userController.register = catchAsync(async (req, res, next) => {
   });
   const accessToken = await user.generateToken();
 
-  // const emailData = await emailHelper.renderEmailTemplate(
-  //   "welcome_email",
-  //   { name: name },
-  //   email
-  // );
+  const emailData = await emailHelper.renderEmailTemplate(
+    "welcome_email",
+    { name: name },
+    email
+  );
 
-  // if (!emailData.error) {
-  //   emailHelper.send(emailData);
-  // }
+  if (!emailData.error) {
+    emailHelper.send(emailData);
+  }
 
   return sendResponse(
     res,
@@ -49,10 +50,20 @@ userController.register = catchAsync(async (req, res, next) => {
 
 userController.getCurrentUser = catchAsync(async (req, res, next) => {
   const userId = req.userId;
-  const user = await User.findById(userId);
+  let user = await User.findById(userId);
+  let clinic = await Clinic.findById(userId);
+
   console.log(user);
-  if (!user)
+  if (!user && !clinic)
     return next(new AppError(400, "User not found", "Get Current User Error"));
+
+  let returnedUser = user ? user.toJSON() : clinic.toJSON();
+
+  if (user) returnedUser.isAdmin = false;
+  else returnedUser.isAdmin = true;
+
+  user = returnedUser;
+
   return sendResponse(res, 200, true, user, null, "Get current user sucessful");
 });
 
@@ -109,6 +120,10 @@ userController.getUsers = catchAsync(async (req, res, next) => {
 userController.createNewBooking = catchAsync(async (req, res, next) => {
   const userID = req.userId;
   const toClinicId = req.params.id;
+  const startTime = req.body.startTime;
+  const doctor = req.body.doctor;
+  const reason = req.body.reason;
+  const endTime = req.body.endTime;
 
   const clinic = await Clinic.findById(toClinicId);
   if (!clinic) {
@@ -116,47 +131,18 @@ userController.createNewBooking = catchAsync(async (req, res, next) => {
       new AppError(400, "Clinic not found", "Send booking request error")
     );
   }
-  let bookingRelate = await Booking.findOne({
-    from: userID,
+
+  await Booking.create({
+    user: userID,
     clinic: toClinicId,
+    status: "Pending",
+    startTime: startTime,
+    endTime: endTime,
+    doctor: doctor,
+    reason: reason,
   });
-  if (!bookingRelate) {
-    await Booking.create({
-      from: userID,
-      clinic: toClinicId,
-      status: "Pending",
-      startTime,
-      endTime,
-    });
-    return sendResponse(res, 200, true, null, null, "Request has been sent");
-  } else {
-    switch (bookingRelate.status) {
-      case "Pending":
-        return next(
-          new AppError(
-            400,
-            "You have received a request from this user",
-            "Send request success"
-          )
-        );
-        break;
-      case "Active":
-        return next(
-          new AppError(400, "your booking has been booked ", "Booking error")
-        );
-        break;
-      case "Cancelled":
-      case "Done":
-        bookingRelate.from = userID;
-        bookingRelate.clinic = toClinicId;
-        bookingRelate.status = "Pending";
-        await bookingRelate.save();
-        return sendResponse(res, 200, null, null, "Request has been sent");
-        break;
-      default:
-        break;
-    }
-  }
+
+  return sendResponse(res, 200, true, null, null, "Request has been sent");
 });
 
 module.exports = userController;

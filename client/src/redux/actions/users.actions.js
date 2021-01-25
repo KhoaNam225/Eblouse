@@ -1,6 +1,6 @@
 import * as types from "../constants/user.constants";
 import api from "../../apiService";
-import routeActions from "../actions/route.actions";
+import routeActions from "./route.actions";
 
 const usersRequest = (
   pageNum = 1,

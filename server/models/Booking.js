@@ -4,12 +4,16 @@ const Clinic = require("./Clinic");
 
 const bookingSchema = Schema(
   {
-    from: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    // doctor: { type: Schema.Types.ObjectId, required: true, ref: "Doctor" },
+    user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    doctor: { type: Schema.Types.ObjectId, required: true, ref: "Doctor" },
     clinic: { type: Schema.Types.ObjectId, required: true, ref: "Clinic" },
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
-    status: { type: String, enum: ["Pending", "Active", "Cancelled", "Done"] },
+    status: {
+      type: String,
+      enum: ["Pending", "Accepted", "Cancelled", "Done"],
+    },
+    reason: { type: String, required: true },
   },
   {
     timestamps: true,

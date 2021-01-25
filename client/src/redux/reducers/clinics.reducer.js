@@ -2,7 +2,8 @@ import * as types from "../constants/clinics.constants";
 
 const initialState = {
   isLoading: false,
-  clinics: [],
+  clinic: null,
+  listClinic: [],
 };
 
 const clinicsReducer = (state = initialState, action) => {
@@ -11,14 +12,14 @@ const clinicsReducer = (state = initialState, action) => {
     case types.GET_CLINIC_REQUEST:
       return { ...state, isLoading: true };
     case types.GET_CLINIC_SUCCESS:
-      return { ...state, isLoading: false, clinics: payload.clinic };
+      return { ...state, isLoading: false, clinic: payload };
     case types.GET_CLINIC_FAILURE:
       return { ...state, isLoading: false };
 
     case types.GET_ALL_CLINICS_REQUEST:
       return { ...state, isLoading: true };
     case types.GET_ALL_CLINICS_SUCCESS:
-      return { ...state, clinics: payload.clinics, isLoading: false };
+      return { ...state, listClinic: payload.listClinic, isLoading: false };
     case types.GET_ALL_CLINICS_FAILURE:
       return { ...state, isLoading: false };
 

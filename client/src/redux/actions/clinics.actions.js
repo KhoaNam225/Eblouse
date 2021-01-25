@@ -11,7 +11,7 @@ const getClinic = (clinicId) => async (dispatch) => {
     console.log(clinic);
     dispatch({ type: types.GET_CLINIC_SUCCESS, payload: clinic });
   } catch (error) {
-    dispatch({ type: types.GET_CLINIC_FAILURE, payload: null });
+    dispatch({ type: types.GET_CLINIC_FAILURE, payload: error });
     toast.error(error);
   }
 };
