@@ -1,40 +1,32 @@
-import * as types from "../constants/user.constants";
-// import { conversationTypes } from "../../config/constants";
+import * as types from "../constants/users.constants";
 
-// const globalConversation = {
-//   _id: conversationTypes.GLOBAL,
-//   type: conversationTypes.GLOBAL,
-// };
-
-const initialState = {
-  users: [],
-  //conversations: [globalConversation],
-  totalPageNum: 1,
-  selectedUser: {},
-  loading: false,
+const initalState = {
+  user: null,
+  isLoading: false,
+  isAuthenticated: false,
 };
 
-const userReducer = (state = initialState, action) => {
+const usersReducer = (state = initalState, action) => {
   const { type, payload } = action;
-  switch (type) {
-    case types.GET_USERS_REQUEST:
-      // case types.GET_CONVERSATIONS_REQUEST:
-      return { ...state, loading: true };
 
-    case types.GET_USERS_SUCCESS:
+  switch (type) {
+    case types.LOGIN_REQUEST:
+      return { ...state, isLoading: true };
+
+    case types.LOGIN_SUCCESS:
       return {
         ...state,
-        users: payload.users,
-        totalPageNum: payload.totalPages,
-        loading: false,
+        user: payload.user,
+        isLoading: false,
+        isAuthenticated: false,
       };
 
-    case types.GET_USERS_FAILURE:
-      return { ...state, loading: false };
+    case types.LOGIN_FAILURE:
+      return { ...state, isLoading: false, isAuthenticated: false };
 
     default:
-      return state;
+      return { ...state };
   }
 };
 
-export default userReducer;
+export default usersReducer;

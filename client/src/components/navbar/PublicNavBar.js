@@ -13,6 +13,7 @@ const PublicNavBar = () => {
   const [clinicName, setClinicName] = useState("");
   const [date, setDate] = useState(null);
   const [peopleNum, setPeopleNum] = useState(0);
+  const [query, setQuery] = useState("");
   const [showFullClicked, setShowFullClicked] = useState(false);
   const [scrollOffsetY, setScrollOffsetY] = useState(0);
   const [showModal, setShowModal] = useState(false);

@@ -5,7 +5,6 @@ const {
 } = require("../helpers/utils.helper");
 const Clinic = require("../models/Clinic");
 const Review = require("../models/Review");
-const User = require("../models/User");
 const reviewController = {};
 
 reviewController.createNewReview = catchAsync(async (req, res, next) => {
@@ -35,24 +34,6 @@ reviewController.createNewReview = catchAsync(async (req, res, next) => {
   );
 });
 
-reviewController.getRandomReview = catchAsync(async (req, res, next) => {
-  const reviews = await Review.find({})
-    .populate("user", ["name", "avatarUrl"])
-    .populate("clinic", "name");
-  if (!reviews)
-    return next(
-      new AppError(400, "Reviews not found ", "get random review error")
-    );
-  return sendResponse(
-    res,
-    200,
-    true,
-    reviews,
-    null,
-    "get random reviews sucessful"
-  );
-});
-
 reviewController.getReviewsOfClinic = catchAsync(async (req, res, next) => {
   const clinicId = req.params.id;
   const page = parseInt(req.query.page) || 1;
@@ -68,6 +49,24 @@ reviewController.getReviewsOfClinic = catchAsync(async (req, res, next) => {
     .skip(offset)
     .limit(limit);
   return sendResponse(res, 200, true, { reviews, totalPages }, null, "");
+});
+
+reviewController.getRandomReview = catchAsync(async (req, res, next) => {
+  const reviews = await Review.find({})
+    .populate("user", ["name", "avatarUrl"])
+    .populate("clinic", ["name", "address"]);
+  if (!reviews)
+    return next(
+      new AppError(400, "Reviews not found ", "get random review error")
+    );
+  return sendResponse(
+    res,
+    200,
+    true,
+    reviews,
+    null,
+    "get random reviews sucessful"
+  );
 });
 
 reviewController.updateSingleReview = catchAsync(async (req, res, next) => {

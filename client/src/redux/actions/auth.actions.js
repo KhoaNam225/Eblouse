@@ -6,7 +6,9 @@ const loginRequest = ({ email, password }) => async (dispatch) => {
   dispatch({ type: types.LOGIN_REQUEST, payload: null });
   try {
     const res = await api.post("/auth/login", { email, password });
+    localStorage.setItem("accessToken", res.data.data.accessToken);
     dispatch({ type: types.LOGIN_SUCCESS, payload: res.data.data });
+    toast.success(`Welcom ${res.data.data.user.name}`);
   } catch (error) {
     console.log(error);
     dispatch({ type: types.LOGIN_FAILURE, payload: error });
@@ -19,6 +21,7 @@ const loginFacebook = (access_token) => async (dispatch) => {
     const res = await api.post("/auth/login/facebook", { access_token });
     dispatch({ type: types.LOGIN_FACEBOOK_SUCCESS, payload: res.data.data });
     const name = res.data.data.user.name;
+    localStorage.setItem("accessToken", res.data.data.accessToken);
     toast.success(`Welcome ${name}`);
   } catch (error) {
     console.log(error);
@@ -32,6 +35,7 @@ const loginGoogle = (access_token) => async (dispatch) => {
     const res = await api.post("/auth/login/google", { access_token });
     dispatch({ type: types.LOGIN_GOOGLE_SUCCESS, payload: res.data.data });
     const name = res.data.data.user.name;
+    localStorage.setItem("accessToken", res.data.data.accessToken);
     toast.success(`Welcome ${name}`);
   } catch (error) {
     console.log(error);

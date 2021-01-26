@@ -7,7 +7,6 @@ const getBookingsList = (userId) => async (dispatch) => {
   try {
     const res = await api.get(`/bookings/${userId}`);
     const bookingsList = res.data.data;
-    console.log("yyhfhfh", bookingsList);
 
     await new Promise((resolve, reject) => {
       setTimeout(resolve, 500);
@@ -65,7 +64,6 @@ const createBookingRequest = (bookingInfo, accessToken) => async (dispatch) => {
     });
     const res = await api.get(`/bookings/${clinicId}`);
     const bookings = res.data.data;
-    console.log("ashdhsad", bookings);
     dispatch({ type: types.CREATE_BOOKING_SUCCESS, payload: bookings });
     toast.success("Appointment created for you!");
   } catch (error) {

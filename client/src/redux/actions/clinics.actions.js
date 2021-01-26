@@ -1,7 +1,6 @@
 import api from "../../apiService";
 import * as types from "../constants/clinics.constants";
 import { toast } from "react-toastify";
-import routeActions from "../actions/route.actions";
 
 const getClinic = (clinicId) => async (dispatch) => {
   dispatch({ type: types.GET_CLINIC_REQUEST, payload: null });
@@ -11,8 +10,37 @@ const getClinic = (clinicId) => async (dispatch) => {
     console.log(clinic);
     dispatch({ type: types.GET_CLINIC_SUCCESS, payload: clinic });
   } catch (error) {
-    dispatch({ type: types.GET_CLINIC_FAILURE, payload: error });
+    dispatch({ type: types.GET_CLINIC_FAILURE, payload: null });
     toast.error(error);
+  }
+};
+
+const getSearchCategory = (
+  pageNum = 1,
+  limit = 10,
+  query = null,
+  clinicId = null,
+  sortBy = null
+) => async (dispatch) => {
+  dispatch({ type: types.CLINIC_REQUEST, payload: null });
+  try {
+    let queryString = "";
+    if (query) {
+      queryString = `&title[$regex]=${query}&title[$options]=i`;
+    }
+    if (clinicId) {
+      queryString = `${queryString}&author=${clinicId}`;
+    }
+    let sortByString = "";
+    if (sortBy?.key) {
+      sortByString = `&sortBy[${sortBy.key}]=${sortBy.ascending}`;
+    }
+    const res = await api.get(
+      `clinic?page=${pageNum}&limit=${limit}${queryString}${sortByString}`
+    );
+    dispatch({ type: types.CLINIC_SUCCESS, payload: res.data.data });
+  } catch (error) {
+    dispatch({ type: types.CLINIC_FAILURE, payload: error });
   }
 };
 
@@ -31,36 +59,9 @@ const getAllClinic = () => async (dispatch) => {
   }
 };
 
-const getSearchCategory = (
-  pageNum = 1,
-  limit = 10,
-  query = null,
-  sortBy = null
-) => async (dispatch) => {
-  dispatch({ type: types.GET_SEARCH_REQUEST, payload: null });
-  try {
-    //
-    let queryString = "";
-    if (query) {
-      queryString = `&search[$regex]=${query}&search[$options]=i`;
-    }
-    let sortByString = "";
-    if (sortBy?.key) {
-      sortByString = `&sortBy[${sortBy.key}]=${sortBy.ascending}`;
-    }
-    const res = await api.get(
-      `/search?page=${pageNum}&limit=${limit}${queryString}${sortByString}`
-    );
-    dispatch({ type: types.GET_SEARCH_SUCCESS, payload: res.data.data });
-  } catch (error) {
-    dispatch({ type: types.GET_SEARCH_FAILURE, payload: error });
-  }
-};
-
 const clinicsActions = {
   getClinic,
   getAllClinic,
   getSearchCategory,
 };
-
 export default clinicsActions;

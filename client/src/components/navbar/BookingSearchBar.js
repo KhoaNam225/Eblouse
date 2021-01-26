@@ -1,14 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useHistory } from "react-router-dom";
+import clinicsActions from "../../redux/actions/clinics.actions";
 
 const BookingSearchBar = ({
   clinicName,
   setClinicName,
   date,
   setDate,
+  setQuery,
   peopleNum,
   setPeopleNum,
   onSubmit,
 }) => {
+  const dispatch = useDispatch();
+  const params = useParams();
+  const query = params.query;
+  console.log("sdaf", query);
+  const history = useHistory();
+
+  useEffect(() => {
+    dispatch(clinicsActions.getSearchCategory(query));
+  }, [dispatch]);
+
   return (
     <div className="search-box">
       <form onSubmit={onSubmit} className="search-form">
@@ -25,7 +39,12 @@ const BookingSearchBar = ({
           }}
         >
           <label>Location</label>
-          <input type="text" value={clinicName} placeholder="Clinic name" />
+          <input
+            type="text"
+            value={query}
+            placeholder="Clinic name"
+            onChange={(e) => e.target.value}
+          />
         </div>
         <div className="split-bar"></div>
         <div

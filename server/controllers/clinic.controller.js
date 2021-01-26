@@ -7,34 +7,26 @@ const Clinic = require("../models/Clinic");
 const Review = require("../models/Review");
 const Doctor = require("../models/Doctor");
 const Booking = require("../models/Booking");
-const userController = require("./user.controller");
 const User = require("../models/User");
-const { findById } = require("../models/Clinic");
 
 const clinicController = {};
 
 clinicController.getSearchCategory = catchAsync(async (req, res, next) => {
-  let query = req.body.query;
-  let clinicList = await Clinic.find({}).populate("specializations");
+  let { page, limit, sortBy, ...filter } = { ...req.query };
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
 
-  clinicList = clinicList.filter(function (clinic) {
-    let specs = clinic.specializations;
-    for (let i = 0; i < specs.length; i++) {
-      if (specs[i].name == query) return true;
-    }
-    return false;
+  const totalClinics = await totalBlogs.countDocuments({
+    ...filter,
   });
-
-  if (!clinicList)
-    return next(new AppError(404, "Sepecialization not found", "Query Error"));
-  return sendResponse(
-    res,
-    200,
-    true,
-    { query, clinicList },
-    null,
-    "Query success"
-  );
+  const totalPages = Math.ceil(totalClinic / limit);
+  const offset = limit * (page - 1);
+  const clinics = await Clinic.find(filter)
+    .sort({ ...sortBy, createAt: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate("doctor");
+  return sendResponse(res, 200, true, { clinics, totalClinics }, null, "");
 });
 
 //  user can get detail of clinic

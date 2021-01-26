@@ -411,11 +411,11 @@ const main = async (genData = false) => {
   console.log(`Booking: ${booking.length} bookings`);
 
   console.log("Done!");
-  // booking = await Booking.find({})
-  //   .populate("doctor")
-  //   .populate("clinic")
-  //   .populate("user");
-  // console.log(JSON.stringify(booking, null, 2));
+  booking = await Booking.find({})
+    .populate("doctor")
+    .populate("clinic")
+    .populate("user");
+  console.log(JSON.stringify(booking, null, 2));
 };
 
 // main(true);

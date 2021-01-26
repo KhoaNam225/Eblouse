@@ -32,15 +32,15 @@ router.get("/:id", clinicController.getBookingListUser);
  * @description Create a new booking for a booking
  * @access Login required
  */
-router.post(
-  "/:id",
-  authMiddleware.loginRequired,
-  // validators.validate([
-  //   param("id").exists().isString().custom(validators.checkObjectId),
-  //   body("content", "Missing content").exists().notEmpty(),
-  // ]),
-  userController.createNewBooking
-);
+// router.post(
+//   "/booking/:id",
+//   // authMiddleware.loginRequired,
+//   validators.validate([
+//     param("id").exists().isString().custom(validators.checkObjectId),
+//     body("content", "Missing content").exists().notEmpty(),
+//   ]),
+//   clinicController.createNewBooking
+// );
 
 /**
  * @route POST api/booking/add/:id
@@ -81,6 +81,16 @@ router.post(
     param("id").exists().isString().custom(validators.checkObjectId),
   ]),
   clinicController.cancelBookingRequest
+);
+
+router.post(
+  "/:id",
+  authMiddleware.loginRequired,
+  // validators.validate([
+  //   param("id").exists().isString().custom(validators.checkObjectId),
+  //   body("content", "Missing content").exists().notEmpty(),
+  // ]),
+  userController.createNewBooking
 );
 
 module.exports = router;

@@ -1,58 +1,26 @@
-import * as types from "../constants/user.constants";
-import api from "../../apiService";
-import routeActions from "./route.actions";
+import * as types from "../constants/users.constants";
+import faker from "faker";
 
-const usersRequest = (
-  pageNum = 1,
-  limit = 10,
-  query = null,
-  sortBy = null
-) => async (dispatch) => {
-  dispatch({ type: types.GET_USERS_REQUEST, payload: null });
+const userLogin = () => async (dispatch) => {
+  dispatch({ type: types.LOGIN_REQUEST, payload: null });
   try {
-    let queryString = "";
-    if (query) {
-      queryString = `&name[$regex]=${query}&name[$options]=i`;
-    }
-    let sortByString = "";
-    if (sortBy?.key) {
-      sortByString = `&sortBy[${sortBy.key}]=${sortBy.ascending}`;
-    }
-    const res = await api.get(
-      `/users?page=${pageNum}&limit=${limit}${queryString}${sortByString}`
-    );
-    dispatch({
-      type: types.GET_USERS_SUCCESS,
-      payload: res.data.data,
+    const user = {};
+    user.firstName = faker.name.firstName();
+    user.lastName = faker.name.lastName();
+    user.email = "abc@gmail.com";
+
+    await new Promise((resolve, reject) => {
+      setTimeout(resolve, 1000);
     });
+
+    dispatch({ type: types.LOGIN_SUCCESS, payload: { user: user } });
   } catch (error) {
-    dispatch({ type: types.GET_USERS_FAILURE, payload: error });
+    dispatch({ type: types.LOGIN_FAILURE, payload: null });
   }
 };
 
-// const conversationsRequest = (pageNum = 1, limit = 10, query = null) => async (
-//   dispatch
-// ) => {
-//   dispatch({ type: types.GET_CONVERSATIONS_REQUEST, payload: null });
-//   try {
-//     let queryString = "";
-//     if (query) {
-//       queryString = `&name=${query}`;
-//     }
-//     const res = await api.get(
-//       `/conversations?page=${pageNum}&limit=${limit}${queryString}`
-//     );
-//     dispatch({
-//       type: types.GET_CONVERSATIONS_SUCCESS,
-//       payload: res.data.data,
-//     });
-//   } catch (error) {
-//     dispatch({ type: types.GET_CONVERSATIONS_FAILURE, payload: error });
-//   }
-// };
-
-const userActions = {
-  usersRequest,
-  // conversationsRequest,
+const usersAction = {
+  userLogin,
 };
-export default userActions;
+
+export default usersAction;

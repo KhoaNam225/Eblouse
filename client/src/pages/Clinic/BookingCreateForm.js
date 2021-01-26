@@ -16,7 +16,7 @@ const BookingTimeTable = ({
   const activeBookings = bookingsList.filter(
     (booking) => booking.status === "Pending" || booking.status === "Accepted"
   );
-
+  console.log("asa", activeBookings);
   const bookingsByDate = activeBookings.filter((booking) => {
     const startDate = booking.startTime.split("T")[0];
     return startDate === date.toISOString().split("T")[0];
@@ -144,6 +144,7 @@ const BookingCreateForm = ({ doctors, clinicId }) => {
   const [selectedDoctor, setSelectedDoctor] = useState(doctors[0]._id);
   const [visitReason, setVisitReason] = useState("");
   const [bookingDate, setBookingDate] = useState(new Date());
+
   const [startTime, setStartTime] = useState(0);
 
   const dispatch = useDispatch();
